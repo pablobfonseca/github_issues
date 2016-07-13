@@ -1,0 +1,91 @@
+{
+  "url": "https://api.github.com/repos/rails/rails/issues/25814",
+  "repository_url": "https://api.github.com/repos/rails/rails",
+  "labels_url": "https://api.github.com/repos/rails/rails/issues/25814/labels{/name}",
+  "comments_url": "https://api.github.com/repos/rails/rails/issues/25814/comments",
+  "events_url": "https://api.github.com/repos/rails/rails/issues/25814/events",
+  "html_url": "https://github.com/rails/rails/pull/25814",
+  "id": 165341918,
+  "number": 25814,
+  "title": "Fix error of `require 'active_support/core_ext/load_error'`",
+  "user": {
+    "login": "mgi166",
+    "id": 4336997,
+    "avatar_url": "https://avatars.githubusercontent.com/u/4336997?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/mgi166",
+    "html_url": "https://github.com/mgi166",
+    "followers_url": "https://api.github.com/users/mgi166/followers",
+    "following_url": "https://api.github.com/users/mgi166/following{/other_user}",
+    "gists_url": "https://api.github.com/users/mgi166/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/mgi166/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/mgi166/subscriptions",
+    "organizations_url": "https://api.github.com/users/mgi166/orgs",
+    "repos_url": "https://api.github.com/users/mgi166/repos",
+    "events_url": "https://api.github.com/users/mgi166/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/mgi166/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "url": "https://api.github.com/repos/rails/rails/labels/activesupport",
+      "name": "activesupport",
+      "color": "FC9300"
+    }
+  ],
+  "state": "closed",
+  "locked": false,
+  "assignee": {
+    "login": "pixeltrix",
+    "id": 6321,
+    "avatar_url": "https://avatars.githubusercontent.com/u/6321?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/pixeltrix",
+    "html_url": "https://github.com/pixeltrix",
+    "followers_url": "https://api.github.com/users/pixeltrix/followers",
+    "following_url": "https://api.github.com/users/pixeltrix/following{/other_user}",
+    "gists_url": "https://api.github.com/users/pixeltrix/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/pixeltrix/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/pixeltrix/subscriptions",
+    "organizations_url": "https://api.github.com/users/pixeltrix/orgs",
+    "repos_url": "https://api.github.com/users/pixeltrix/repos",
+    "events_url": "https://api.github.com/users/pixeltrix/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/pixeltrix/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "assignees": [
+    {
+      "login": "pixeltrix",
+      "id": 6321,
+      "avatar_url": "https://avatars.githubusercontent.com/u/6321?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/pixeltrix",
+      "html_url": "https://github.com/pixeltrix",
+      "followers_url": "https://api.github.com/users/pixeltrix/followers",
+      "following_url": "https://api.github.com/users/pixeltrix/following{/other_user}",
+      "gists_url": "https://api.github.com/users/pixeltrix/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/pixeltrix/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/pixeltrix/subscriptions",
+      "organizations_url": "https://api.github.com/users/pixeltrix/orgs",
+      "repos_url": "https://api.github.com/users/pixeltrix/repos",
+      "events_url": "https://api.github.com/users/pixeltrix/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/pixeltrix/received_events",
+      "type": "User",
+      "site_admin": false
+    }
+  ],
+  "milestone": null,
+  "comments": 5,
+  "created_at": "2016-07-13T14:54:47Z",
+  "updated_at": "2016-07-13T15:40:47Z",
+  "closed_at": "2016-07-13T15:39:31Z",
+  "pull_request": {
+    "url": "https://api.github.com/repos/rails/rails/pulls/25814",
+    "html_url": "https://github.com/rails/rails/pull/25814",
+    "diff_url": "https://github.com/rails/rails/pull/25814.diff",
+    "patch_url": "https://github.com/rails/rails/pull/25814.patch"
+  },
+  "body": "### Summary\r\n\r\nRequire `active_support/deprecation` instead of `active_support/depreppcation/proxy_wrappers`\r\n\r\n### Other Information\r\n\r\nIn active_support `5.0.0.beta1` ~ `5.0.0`, This exception throw when called `require 'active_support/core_ext/load_error'`\r\n\r\n```ruby\r\n>> require 'active_support/core_ext/load_error'\r\nNoMethodError: undefined method `instance' for ActiveSupport::Deprecation:Class\r\nDid you mean?  instance_of?\r\nfrom /Users/argerich/dev/sample-active-support5/vendor/bundle/gems/activesupport-5.0.0/lib/active_support/deprecation/proxy_wrappers.rb:124:in `initialize'\r\n```\r\n\r\nBecause you can't have `ActiveSupport::Deprecation.instance` without calling `include Singleton` in `active_support/deprecation`.\r\nAnd `require 'active_support/deprecation/proxy_wrapper'` is called in `active_support/deprecation`, so I think that the problem is fixed.\r\n\r\n### Confirmation\r\n#### Before\r\n\r\n```sh\r\n$ irb\r\n```\r\n\r\n```ruby\r\n>> require 'bundler/setup'\r\n=> true\r\n>> require 'active_support/core_ext/load_error'\r\nNoMethodError: undefined method `instance' for ActiveSupport::Deprecation:Class\r\nDid you mean?  instance_of?\r\n        from /Users/argerich/dev/rails/activesupport/lib/active_support/deprecation/proxy_wrappers.rb:124:in `initialize'\r\n        from /Users/argerich/dev/rails/activesupport/lib/active_support/deprecation/proxy_wrappers.rb:10:in `new'\r\n        from /Users/argerich/dev/rails/activesupport/lib/active_support/deprecation/proxy_wrappers.rb:10:in `new'\r\n        from /Users/argerich/dev/rails/activesupport/lib/active_support/core_ext/load_error.rb:30:in `<top (required)>'\r\n        from (irb):2:in `require'\r\n        from (irb):2\r\n        from /Users/argerich/.rbenv/versions/2.3.0/bin/irb:11:in `<main>'\r\n```\r\n\r\n#### After\r\n\r\n```sh\r\n$ irb\r\n```\r\n\r\n```ruby\r\n>> require 'bundler/setup'\r\n=> true\r\n>> require 'active_support/core_ext/load_error'\r\n=> true\r\n```"
+}
